@@ -1,0 +1,8 @@
+overrides: "pyexcel.yaml"
+name: "pyexcel-xlsxr"
+nick_name: "xlsxr"
+version: "0.0.1"
+current_version: "0.0.1"
+release: "0.0.1"
+dependencies: []
+description: "Read xlsx file using partial xml"
