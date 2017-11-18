@@ -4,6 +4,7 @@ from pyexcel_xlsxr.messy_xlsx import parse_row
 from pyexcel_xlsxr.messy_xlsx import parse_styles
 from pyexcel_xlsxr.messy_xlsx import parse_book_properties
 from pyexcel_xlsxr.messy_xlsx import parse_xfs_styles
+from pyexcel_xlsxr.messy_xlsx import parse_shared_strings
 from datetime import datetime, time
 
 def test_list_one():
@@ -106,7 +107,7 @@ def test_parse_row():
             self.styles = {'1': 'dd/mm/yy', '2': 'h:mm:ss;@'}
             self.properties = {'date1904': False}
     data = parse_row(xml_string, Book())
-    eq_([cell.value for cell in data],
+    eq_([cell for cell in data],
         [datetime(year=2015, month=1, day=1), '13:13'])
 
 
@@ -127,3 +128,9 @@ def test_parse_xfs_styles():
     sample = '<cellXfs count="3"><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="164" xfId="0"></xf><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="165" xfId="0"></xf><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="166" xfId="0"></xf></cellXfs><cellStyles count="6">'
     xfs_styles = parse_xfs_styles(sample)
     eq_(xfs_styles, [164, 165, 166])
+
+
+def test_parse_shared_strings():
+    sample = '<sst count="2" uniqueCount="2" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>Date</t></si><si><t>Time</t></si></sst>'
+    content = parse_shared_strings(sample)
+    eq_(list(content), ['Date', 'Time'])

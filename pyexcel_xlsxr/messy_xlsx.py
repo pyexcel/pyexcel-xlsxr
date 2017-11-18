@@ -1,11 +1,13 @@
+import os
 import io
 import re
 from lxml import etree
 import zipfile
 from datetime import datetime, timedelta
 
-
 STYLE_FILENAME = "xl/styles.xml"
+SHARED_STRING = "xl/sharedStrings.xml"
+WORK_BOOK = "xl/workbook.xml"
 SHEET_MATCHER = 'xl/worksheets/(work)?sheet([0-9]+)?.xml'
 XLSX_ROW_MATCH = re.compile(
     b".*?(<row.*?<\/.*?row>).*?",
@@ -119,13 +121,18 @@ class XLSXBookSet(object):
         self.zip_file = zipfile.ZipFile(file_alike)
         self.styles, self.xfs_styles = self.__extract_styles()
         self.properties = self.__extract_book_properties()
+        self.shared_strings = list(self.__extract_shared_strings())
+
+    def __extract_shared_strings(self):
+        shared_string_content = self.zip_file.open(SHARED_STRING).read()
+        return parse_shared_strings(shared_string_content)
 
     def __extract_styles(self):
         style_content = self.zip_file.open(STYLE_FILENAME).read()
         return parse_styles(style_content), parse_xfs_styles(style_content)
 
     def __extract_book_properties(self):
-        book_content = self.zip_file.open("xl/workbook.xml").read()
+        book_content = self.zip_file.open(WORK_BOOK).read()
         return parse_book_properties(book_content)
 
     def __del__(self):
@@ -135,7 +142,9 @@ class XLSXBookSet(object):
         sheet_files = find_sheets(self.zip_file.namelist())
         for sheet_file in sheet_files:
             content = self.zip_file.open(sheet_file).read()
-            yield XLSXTable(sheet_file, content, self)
+            sheet_name = os.path.basename(sheet_file)
+            sheet_name = sheet_name[:-4]
+            yield XLSXTable(sheet_name, content, self)
 
 
 def find_sheets(file_list):
@@ -145,7 +154,7 @@ def find_sheets(file_list):
 
 class Cell(object):
     def __init__(self):
-        self.type_string = ''
+        self.column_type = ''
         self.style_string = ''
         self.value = ''
         self.type = ''
@@ -159,30 +168,38 @@ def parse_row(row_xml_string, book):
     cells = []
     cell = Cell()
     for action, element in etree.iterparse(partial, ('end',)):
-        print(element.tag)
         if element.tag == 'v':
             cell.value = element.text
         elif element.tag == 'c':
             local_type = element.attrib.get('t')
             style_int = element.attrib.get('s')
             xfs_style_int = book.xfs_styles[int(style_int)]
-            cell.type_string = local_type
+            cell.column_type = local_type
             cell.style_string = book.styles.get(str(xfs_style_int))
             parse_cell(cell, book)
             cells.append(cell)
             cell = Cell()
-    return cells
+    return [c.value for c in cells]
 
 
 def parse_cell(cell, book):
     cell.type = parse_cell_type(cell)
-    parse_cell_value(cell, book)
+    if cell.column_type == 's':
+        cell.value = book.shared_strings[int(cell.value)]
+    elif cell.column_type == 'b':
+        cell.value = (
+            (int(cell.value) == 1 and "TRUE") or
+            (int(cell.value) == 0 and "FALSE") or
+            cell.value)
+    elif cell.column_type == 'n':
+        parse_cell_value(cell, book)
+    else:
+        raise Exception("Cannot handle cell")
 
 
 def parse_cell_type(cell):
     cell_type = None
     if cell.style_string:
-        print(cell.style_string)
         date_time_flag = (
             re.match("^\d+(\.\d+)?$", cell.value) and
             re.match(".*[hsmdyY]", cell.style_string) and
@@ -200,14 +217,12 @@ def parse_cell_type(cell):
 
 
 def parse_cell_value(cell, book):
-    print(cell.value, cell.type)
     try:
         if cell.type == 'date':  # date/time
             if book.properties['date1904']:
                 start = datetime(1904, 1, 1)
             else:
                 start = datetime(1899, 12, 30)
-            print(cell.value)
             cell.value = start + timedelta(float(cell.value))
         elif cell.type == 'time':  # time
             # round to microseconds
@@ -260,3 +275,12 @@ def parse_book_properties(book_content):
                 value = element.attrib.get('date1904')
                 properties['date1904'] = value.lower().strip() == 'true'
     return properties
+
+
+def parse_shared_strings(content):
+    root = etree.fromstring(content)
+    for si in root.iterchildren():
+        content = ""
+        for text in si.iterchildren():
+            content += text.text
+        yield(content)
