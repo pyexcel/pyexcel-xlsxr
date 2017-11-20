@@ -9,10 +9,12 @@ class TestAutoDetectInt(TestCase):
     def setUp(self):
         self.content = [[1, 2, 3.1]]
         self.test_file = "test_auto_detect_init.xlsx"
-        pe.save_as(array=self.content, dest_file_name=self.test_file)
+        pe.save_as(
+            array=self.content, dest_file_name=self.test_file
+         )
 
     def test_auto_detect_int(self):
-        sheet = pe.get_sheet(file_name=self.test_file)
+        sheet = pe.get_sheet(file_name=self.test_file, library="pyexcel-xlsxr")
         expected = dedent("""
         pyexcel_sheet1:
         +---+---+-----+
@@ -21,7 +23,7 @@ class TestAutoDetectInt(TestCase):
         self.assertEqual(str(sheet), expected)
 
     def test_get_book_auto_detect_int(self):
-        book = pe.get_book(file_name=self.test_file)
+        book = pe.get_book(file_name=self.test_file, library="pyexcel-xlsxr")
         expected = dedent("""
         pyexcel_sheet1:
         +---+---+-----+
@@ -30,7 +32,8 @@ class TestAutoDetectInt(TestCase):
         self.assertEqual(str(book), expected)
 
     def test_auto_detect_int_false(self):
-        sheet = pe.get_sheet(file_name=self.test_file, auto_detect_int=False)
+        sheet = pe.get_sheet(file_name=self.test_file, auto_detect_int=False,
+                             library="pyexcel-xlsxr")
         expected = dedent("""
         pyexcel_sheet1:
         +-----+-----+-----+
@@ -39,7 +42,8 @@ class TestAutoDetectInt(TestCase):
         self.assertEqual(str(sheet), expected)
 
     def test_get_book_auto_detect_int_false(self):
-        book = pe.get_book(file_name=self.test_file, auto_detect_int=False)
+        book = pe.get_book(file_name=self.test_file, auto_detect_int=False,
+                           library="pyexcel-xlsxr")
         expected = dedent("""
         pyexcel_sheet1:
         +-----+-----+-----+
