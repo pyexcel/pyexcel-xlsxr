@@ -121,7 +121,13 @@ def test_parse_styles():
 def test_parse_properties():
     sample = '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><fileVersion appName="Calc"/><workbookPr backupFile="false" showObjects="all" date1904="false"/><workbookProtection/>'
     properties = parse_book_properties(sample)
-    eq_(properties, {'date1904': False})
+    eq_(properties, {'date1904': False, 'sheets': []})
+
+
+def test_parse_sheet_properties():
+    sample = '</bookViews><sheets><sheet name="Sheet1" sheetId="1" state="visible" r:id="rId2"/><sheet name="Sheet2" sheetId="2" state="visible" r:id="rId3"/><sheet name="Sheet3" sheetId="3" state="visible" r:id="rId4"/></sheets><calcPr iterateCount="100" refMode="A1" iterate="false" iterateDelta="0.001"/>'
+    properties = parse_book_properties(sample)
+    eq_(properties, {'sheets': ['Sheet1', 'Sheet2', 'Sheet3']})
 
 
 def test_parse_xfs_styles():

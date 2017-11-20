@@ -18,6 +18,9 @@ NUMBER_FMT_MATCHER = re.compile(
 XFS_FMT_MATCHER = re.compile(
     b".*?(<cellXfs.*?<\/.*?cellXfs>).*?",
     re.MULTILINE)
+SHEET_FMT_MATCHER = re.compile(
+    b".*?(<sheet .*?\/>).*?",
+    re.MULTILINE)
 DATE_1904_MATCHER = re.compile(
     b".*?(<workbookPr.*?\/>).*?",
     re.MULTILINE)
@@ -140,10 +143,9 @@ class XLSXBookSet(object):
 
     def make_tables(self):
         sheet_files = find_sheets(self.zip_file.namelist())
-        for sheet_file in sheet_files:
+        for sheet_index, sheet_file in enumerate(sheet_files):
             content = self.zip_file.open(sheet_file).read()
-            sheet_name = os.path.basename(sheet_file)
-            sheet_name = sheet_name[:-4]
+            sheet_name = self.properties['sheets'][sheet_index]
             yield XLSXTable(sheet_name, content, self)
 
 
@@ -172,10 +174,11 @@ def parse_row(row_xml_string, book):
             cell.value = element.text
         elif element.tag == 'c':
             local_type = element.attrib.get('t')
-            style_int = element.attrib.get('s')
-            xfs_style_int = book.xfs_styles[int(style_int)]
             cell.column_type = local_type
-            cell.style_string = book.styles.get(str(xfs_style_int))
+            style_int = element.attrib.get('s')
+            if style_int:
+                xfs_style_int = book.xfs_styles[int(style_int)]
+                cell.style_string = book.styles.get(str(xfs_style_int))
             parse_cell(cell, book)
             cells.append(cell)
             cell = Cell()
@@ -266,14 +269,35 @@ def parse_xfs_styles(style_content):
 
 
 def parse_book_properties(book_content):
-    properties = {}
+    properties = {'sheets': []}
     date1904 = DATE_1904_MATCHER.findall(book_content)
     for apr in date1904:
         partial = io.BytesIO(apr)
         for action, element in etree.iterparse(partial, ('end', )):
             if element.tag == 'workbookPr':
                 value = element.attrib.get('date1904')
-                properties['date1904'] = value.lower().strip() == 'true'
+                if value:
+                    properties['date1904'] = value.lower().strip() == 'true'
+                else:
+                    properties['date1904'] = False
+    namespaces = {
+        'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships' # flake8: noqa
+    }
+
+    xlsx_header = u"<wrapper {0}>"\
+                  .format(" ".join('xmlns:{0}="{1}"'.format(k, v)
+                                   for k, v in namespaces.iteritems())).encode('utf-8')
+    xlsx_footer = u"</wrapper>".encode('utf-8')
+    sheets = SHEET_FMT_MATCHER.findall(book_content)
+    for sheet in sheets:
+        block = (xlsx_header +
+                 sheet +
+                 xlsx_footer)
+        partial = io.BytesIO(block)
+        for action, element in etree.iterparse(partial, ('end', )):
+            if element.tag == 'sheet':
+                value = element.attrib.get('name')
+                properties['sheets'].append(value)
     return properties
 
 

@@ -4,5 +4,6 @@ nick_name: "xlsxr"
 version: "0.0.1"
 current_version: "0.0.1"
 release: "0.0.1"
+file_type: xlsx
 dependencies: []
 description: "Read xlsx file using partial xml"
