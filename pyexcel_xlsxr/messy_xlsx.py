@@ -245,10 +245,11 @@ def parse_cell_value(cell, book):
         elif cell.type == 'time':  # time
             # round to microseconds
             seconds_in_total = int(round((float(cell.value) % 1) * 24 * 60 * 60, 6))
-            minutes_in_total = seconds_in_total / 60
-            seconds = minutes_in_total % 60
+            minutes_in_total = int(seconds_in_total / 60)
+            second = int(minutes_in_total % 60)
+            hour = int(minutes_in_total / 60)
             # str(t / 60) + ":" + ('0' + str(t % 60))[-2:]
-            cell.value = time(hour=minutes_in_total / 60, minute=minutes_in_total % 60, second=seconds)
+            cell.value = time(hour=hour, minute=minutes_in_total % 60, second=second)
         elif cell.type == 'float' and ('E' in cell.value or 'e' in cell.value):
             cell.value = ("%f" % (float(cell.value))).rstrip('0').rstrip('.')
     except (ValueError, OverflowError):

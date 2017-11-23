@@ -114,7 +114,7 @@ def test_alternative_single_sheet():
 
 
 def test_parse_row():
-    xml_string = '<row collapsed="false" customFormat="false" customHeight="false" hidden="false" ht="12.75" outlineLevel="0" r="4"><c r="A4" s="1" t="n"><v>42005</v></c><c r="B4" s="2" t="n"><v>0.550844907407407</v></c></row>'  # flake8: noqa
+    xml_string = b'<row collapsed="false" customFormat="false" customHeight="false" hidden="false" ht="12.75" outlineLevel="0" r="4"><c r="A4" s="1" t="n"><v>42005</v></c><c r="B4" s="2" t="n"><v>0.550844907407407</v></c></row>'  # flake8: noqa
     class Book:
         def __init__(self):
             self.xfs_styles = [1, 1, 2]
@@ -126,31 +126,31 @@ def test_parse_row():
 
 
 def test_parse_styles():
-    sample = '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt formatCode="GENERAL" numFmtId="164"/><numFmt formatCode="DD/MM/YY" numFmtId="165"/><numFmt formatCode="H:MM:SS;@" numFmtId="166"/></numFmts><fonts count="4"><font><name val="Arial"/>'
+    sample = b'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt formatCode="GENERAL" numFmtId="164"/><numFmt formatCode="DD/MM/YY" numFmtId="165"/><numFmt formatCode="H:MM:SS;@" numFmtId="166"/></numFmts><fonts count="4"><font><name val="Arial"/>'
     styles = parse_styles(sample)
     eq_(list(styles.values()),
         ['general', 'dd/mm/yy', 'h:mm:ss;@'])
 
 
 def test_parse_properties():
-    sample = '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><fileVersion appName="Calc"/><workbookPr backupFile="false" showObjects="all" date1904="false"/><workbookProtection/>'
+    sample = b'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><fileVersion appName="Calc"/><workbookPr backupFile="false" showObjects="all" date1904="false"/><workbookProtection/>'
     properties = parse_book_properties(sample)
     eq_(properties, {'date1904': False, 'sheets': []})
 
 
 def test_parse_sheet_properties():
-    sample = '</bookViews><sheets><sheet name="Sheet1" sheetId="1" state="visible" r:id="rId2"/><sheet name="Sheet2" sheetId="2" state="visible" r:id="rId3"/><sheet name="Sheet3" sheetId="3" state="visible" r:id="rId4"/></sheets><calcPr iterateCount="100" refMode="A1" iterate="false" iterateDelta="0.001"/>'
+    sample = b'</bookViews><sheets><sheet name="Sheet1" sheetId="1" state="visible" r:id="rId2"/><sheet name="Sheet2" sheetId="2" state="visible" r:id="rId3"/><sheet name="Sheet3" sheetId="3" state="visible" r:id="rId4"/></sheets><calcPr iterateCount="100" refMode="A1" iterate="false" iterateDelta="0.001"/>'
     properties = parse_book_properties(sample)
     eq_(properties, {'sheets': ['Sheet1', 'Sheet2', 'Sheet3']})
 
 
 def test_parse_xfs_styles():
-    sample = '<cellXfs count="3"><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="164" xfId="0"></xf><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="165" xfId="0"></xf><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="166" xfId="0"></xf></cellXfs><cellStyles count="6">'
+    sample = b'<cellXfs count="3"><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="164" xfId="0"></xf><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="165" xfId="0"></xf><xf applyAlignment="false" applyBorder="false" applyFont="false" applyProtection="false" borderId="0" fillId="0" fontId="0" numFmtId="166" xfId="0"></xf></cellXfs><cellStyles count="6">'
     xfs_styles = parse_xfs_styles(sample)
     eq_(xfs_styles, [164, 165, 166])
 
 
 def test_parse_shared_strings():
-    sample = '<sst count="2" uniqueCount="2" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>Date</t></si><si><t>Time</t></si></sst>'
+    sample = b'<sst count="2" uniqueCount="2" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>Date</t></si><si><t>Time</t></si></sst>'
     content = parse_shared_strings(sample)
     eq_(list(content), ['Date', 'Time'])
