@@ -3,12 +3,13 @@ import io
 import re
 from lxml import etree
 import zipfile
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 STYLE_FILENAME = "xl/styles.xml"
 SHARED_STRING = "xl/sharedStrings.xml"
 WORK_BOOK = "xl/workbook.xml"
 SHEET_MATCHER = 'xl/worksheets/(work)?sheet([0-9]+)?.xml'
+SHEET_INDEX_MATCHER = 'xl/worksheets/(work)?sheet(([0-9]+)?).xml'
 XLSX_ROW_MATCH = re.compile(
     b".*?(<row.*?<\/.*?row>).*?",
     re.MULTILINE)
@@ -127,8 +128,11 @@ class XLSXBookSet(object):
         self.shared_strings = list(self.__extract_shared_strings())
 
     def __extract_shared_strings(self):
-        shared_string_content = self.zip_file.open(SHARED_STRING).read()
-        return parse_shared_strings(shared_string_content)
+        try:
+            shared_string_content = self.zip_file.open(SHARED_STRING).read()
+            return parse_shared_strings(shared_string_content)
+        except KeyError:
+            return []
 
     def __extract_styles(self):
         style_content = self.zip_file.open(STYLE_FILENAME).read()
@@ -143,15 +147,26 @@ class XLSXBookSet(object):
 
     def make_tables(self):
         sheet_files = find_sheets(self.zip_file.namelist())
-        for sheet_index, sheet_file in enumerate(sheet_files):
+        for sheet_file in sorted(sheet_files):
             content = self.zip_file.open(sheet_file).read()
+            sheet_index = get_sheet_index(sheet_file)
             sheet_name = self.properties['sheets'][sheet_index]
             yield XLSXTable(sheet_name, content, self)
 
 
 def find_sheets(file_list):
+
     return [sheet_file for sheet_file in file_list
             if re.match(SHEET_MATCHER, sheet_file)]
+
+
+def get_sheet_index(file_name):
+    if re.match(SHEET_MATCHER, file_name):
+        result = re.search(SHEET_INDEX_MATCHER, file_name)
+        index = int(result.group(3)) if result.group(3) else 1
+        return index - 1
+    else:
+        raise Exception("Invalid sheet file name")
 
 
 class Cell(object):
@@ -170,9 +185,9 @@ def parse_row(row_xml_string, book):
     cells = []
     cell = Cell()
     for action, element in etree.iterparse(partial, ('end',)):
-        if element.tag == 'v':
+        if element.tag in ['v', 't']:
             cell.value = element.text
-        elif element.tag == 'c':
+        elif element.tag in ['c']:
             local_type = element.attrib.get('t')
             cell.column_type = local_type
             style_int = element.attrib.get('s')
@@ -196,8 +211,8 @@ def parse_cell(cell, book):
             cell.value)
     elif cell.column_type == 'n':
         parse_cell_value(cell, book)
-    else:
-        raise Exception("Cannot handle cell")
+        #    else:
+        #        raise Exception("Cannot handle cell type :" + cell.value)
 
 
 def parse_cell_type(cell):
@@ -229,9 +244,11 @@ def parse_cell_value(cell, book):
             cell.value = start + timedelta(float(cell.value))
         elif cell.type == 'time':  # time
             # round to microseconds
-            t = int(round((float(cell.value) % 1) * 24 * 60 * 60, 6)) / 60
+            seconds_in_total = int(round((float(cell.value) % 1) * 24 * 60 * 60, 6))
+            minutes_in_total = seconds_in_total / 60
+            seconds = minutes_in_total % 60
             # str(t / 60) + ":" + ('0' + str(t % 60))[-2:]
-            cell.value = "%.2i:%.2i" % (t / 60, t % 60)
+            cell.value = time(hour=minutes_in_total / 60, minute=minutes_in_total % 60, second=seconds)
         elif cell.type == 'float' and ('E' in cell.value or 'e' in cell.value):
             cell.value = ("%f" % (float(cell.value))).rstrip('0').rstrip('.')
     except (ValueError, OverflowError):

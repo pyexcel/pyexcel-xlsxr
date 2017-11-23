@@ -5,7 +5,21 @@ from pyexcel_xlsxr.messy_xlsx import parse_styles
 from pyexcel_xlsxr.messy_xlsx import parse_book_properties
 from pyexcel_xlsxr.messy_xlsx import parse_xfs_styles
 from pyexcel_xlsxr.messy_xlsx import parse_shared_strings
+from pyexcel_xlsxr.messy_xlsx import get_sheet_index
 from datetime import datetime, time
+
+
+def test_get_sheet_index():
+    samples = [
+        'xl/worksheets/sheet1.xml',
+        'xl/worksheets/worksheet2.xml',
+        'xl/worksheets/sheet.xml',
+        'xl/worksheets/worksheet.xml',
+    ]
+    expected = [0, 1, 0, 0]
+    actual = [get_sheet_index(file_name) for file_name in samples]
+    eq_(actual, expected)
+
 
 def test_list_one():
     test_sample = [
@@ -108,7 +122,7 @@ def test_parse_row():
             self.properties = {'date1904': False}
     data = parse_row(xml_string, Book())
     eq_([cell for cell in data],
-        [datetime(year=2015, month=1, day=1), '13:13'])
+        [datetime(year=2015, month=1, day=1), time(hour=13, minute=13, second=13)])
 
 
 def test_parse_styles():
