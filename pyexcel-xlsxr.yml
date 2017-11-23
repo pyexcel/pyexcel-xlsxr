@@ -6,5 +6,5 @@ current_version: "0.0.1"
 release: "0.0.1"
 file_type: xlsx
 dependencies:
-  - lxml
+  - lxml >= 3.4.4
 description: "Read xlsx file using partial xml"

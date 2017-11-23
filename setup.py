@@ -38,7 +38,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'lxml',
+    'lxml >= 3.4.4',
 ]
 
 
