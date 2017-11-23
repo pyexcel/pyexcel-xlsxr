@@ -4,6 +4,7 @@ import re
 from lxml import etree
 import zipfile
 from datetime import datetime, timedelta, time
+from pyexcel_io._compact import OrderedDict
 
 STYLE_FILENAME = "xl/styles.xml"
 SHARED_STRING = "xl/sharedStrings.xml"
@@ -211,9 +212,8 @@ def parse_cell(cell, book):
             cell.value)
     elif cell.column_type == 'n':
         parse_cell_value(cell, book)
-        #    else:
-        #        raise Exception("Cannot handle cell type :" + cell.value)
-
+    # else
+    #   no action
 
 def parse_cell_type(cell):
     cell_type = None
@@ -258,7 +258,7 @@ def parse_cell_value(cell, book):
 
 
 def parse_styles(style_content):
-    styles = {}
+    styles = OrderedDict()
     formats = NUMBER_FMT_MATCHER.findall(style_content)
     for aformat in formats:
         partial = io.BytesIO(aformat)
