@@ -203,17 +203,7 @@ def parse_row(row_xml_string, book):
 
 def parse_cell(cell, book):
     cell.type = parse_cell_type(cell)
-    if cell.column_type == 's':
-        cell.value = book.shared_strings[int(cell.value)]
-    elif cell.column_type == 'b':
-        cell.value = (
-            (int(cell.value) == 1 and "TRUE") or
-            (int(cell.value) == 0 and "FALSE") or
-            cell.value)
-    elif cell.column_type == 'n':
-        parse_cell_value(cell, book)
-    # else
-    #   no action
+    parse_cell_value(cell, book)
 
 def parse_cell_type(cell):
     cell_type = None
@@ -233,8 +223,21 @@ def parse_cell_type(cell):
             cell_type = "float"
     return cell_type
 
-
 def parse_cell_value(cell, book):
+    if cell.column_type == 's':
+        cell.value = book.shared_strings[int(cell.value)]
+    elif cell.column_type == 'b':
+        cell.value = (
+            (int(cell.value) == 1 and "TRUE") or
+            (int(cell.value) == 0 and "FALSE") or
+            cell.value)
+    elif cell.column_type == 'n':
+        parse_numeric_cell_value(cell, book)
+    # else
+    #   no action
+
+
+def parse_numeric_cell_value(cell, book):
     try:
         if cell.type == 'date':  # date/time
             if book.properties['date1904']:
