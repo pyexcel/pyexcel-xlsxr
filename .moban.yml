@@ -16,9 +16,7 @@ targets:
   - test.bat: test.script.jj2
   - .travis.yml: travis.yml.jj2
   - .gitignore: gitignore.jj2
-  - "docs/source/conf.py": "docs/source/conf.py.jj2"
   - "pyexcel_xlsxr/_version.py": version.py.jj2
-  - "tests/test_filter.py": "tests/test_filter.py.jj2"
-  - "tests/test_formatters.py": "tests/test_formatters.py"
-  - "tests/test_stringio.py": "tests/test_stringio.py.jj2"
-  - "tests/base.py": "tests/base.py"
+  - output: CHANGELOG.rst
+    configuration: changelog.yml
+    template: CHANGELOG.rst.jj2

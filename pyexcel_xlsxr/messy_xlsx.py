@@ -20,7 +20,8 @@ XFS_FMT_MATCHER = re.compile(
 )
 SHEET_FMT_MATCHER = re.compile(b".*?(<sheet .*?\/>).*?", re.MULTILINE)
 DATE_1904_MATCHER = re.compile(b".*?(<workbookPr.*?\/>).*?", re.MULTILINE)
-# X14AC_NAMESPACE="xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\""
+#"xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
+#But it not used for now
 X14AC_NAMESPACE = 'xmlns:x14ac="http://not.used.com/"'
 
 # see also ruby-roo lib at: http://github.com/hmcgowan/roo
