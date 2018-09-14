@@ -1,10 +1,11 @@
 import os
-#from nose import eq_
+
+# from nose import eq_
 from pyexcel_xlsxr import get_data
 
 
 def test_issue_1():
-    test_file = get_fixture('issue_1.xlsx')
+    test_file = get_fixture("issue_1.xlsx")
     data = get_data(test_file)
 
 

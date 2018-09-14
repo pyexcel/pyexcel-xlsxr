@@ -18,10 +18,14 @@ from pyexcel_xlsxr.messy_xlsx import XLSXBookSet
 
 
 class XLSXSheet(SheetReader):
-    def __init__(self, sheet, auto_detect_int=True,
-                 auto_detect_float=True,
-                 auto_detect_datetime=True,
-                 **keywords):
+    def __init__(
+        self,
+        sheet,
+        auto_detect_int=True,
+        auto_detect_float=True,
+        auto_detect_datetime=True,
+        **keywords
+    ):
         SheetReader.__init__(self, sheet, **keywords)
         self.__auto_detect_int = auto_detect_int
         self.__auto_detect_float = auto_detect_float
@@ -47,9 +51,8 @@ class XLSXSheet(SheetReader):
         if ret is None and self.__auto_detect_float:
             ret = service.detect_float_value(cell)
             shall_we_ignore_the_conversion = (
-                (ret in [float('inf'), float('-inf')]) and
-                self.__ignore_infinity
-            )
+                ret in [float("inf"), float("-inf")]
+            ) and self.__ignore_infinity
             if shall_we_ignore_the_conversion:
                 ret = None
         if ret is None:
@@ -63,7 +66,7 @@ class XLSXBook(BookReader):
         self._load_from_file()
 
     def open_stream(self, file_stream, **keywords):
-        if not hasattr(file_stream, 'seek'):
+        if not hasattr(file_stream, "seek"):
             # python 2
             # Hei zipfile in odfpy would do a seek
             # but stream from urlib cannot do seek
@@ -78,8 +81,7 @@ class XLSXBook(BookReader):
 
     def read_sheet_by_name(self, sheet_name):
         tables = self._native_book.make_tables()
-        rets = [table for table in tables
-                if table.name == sheet_name]
+        rets = [table for table in tables if table.name == sheet_name]
         if len(rets) == 0:
             raise ValueError("%s cannot be found" % sheet_name)
         else:
@@ -92,8 +94,9 @@ class XLSXBook(BookReader):
         if sheet_index < length:
             return self.read_sheet(tables[sheet_index])
         else:
-            raise IndexError("Index %d of out bound %d" % (
-                sheet_index, length))
+            raise IndexError(
+                "Index %d of out bound %d" % (sheet_index, length)
+            )
 
     def read_all(self):
         """read all sheets"""
