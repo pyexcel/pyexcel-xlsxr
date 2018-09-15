@@ -1,9 +1,9 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-xlsxr"
 nick_name: "xlsxr"
-version: "0.5.1"
-current_version: "0.5.1"
-release: "0.5.1"
+version: "0.5.2"
+current_version: "0.5.2"
+release: "0.5.2"
 file_type: xlsx
 nodocs: true
 dependencies:

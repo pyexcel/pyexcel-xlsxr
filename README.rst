@@ -22,6 +22,19 @@ pyexcel-xlsxr - Let you focus on data, instead of xlsx format
 it wont load all content into memory.
 
 
+lxml installation
+=================
+
+This library depends on lxml. Because its availablity, the use of this library is restricted.
+
+for PyPy, lxml == 3.4.4 are tested to work well. But lxml above 3.4.4 is difficult to get installed.
+
+for Python 3.7, please use lxml==4.1.1.
+
+Otherwise, this library works OK with lxml 3.4.4 or above.
+
+
+
 Known constraints
 ==================
 
