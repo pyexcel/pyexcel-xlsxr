@@ -22,7 +22,7 @@ SHEET_FMT_MATCHER = re.compile(b".*?(<sheet .*?\/>).*?", re.MULTILINE)
 DATE_1904_MATCHER = re.compile(b".*?(<workbookPr.*?\/>).*?", re.MULTILINE)
 #"xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
 #But it not used for now
-X14AC_NAMESPACE = 'xmlns:x14ac="http://not.used.com/"'
+X14AC_NAMESPACE = b'xmlns:x14ac="http://not.used.com/"'
 
 # see also ruby-roo lib at: http://github.com/hmcgowan/roo
 FORMATS = {
@@ -182,9 +182,9 @@ class Cell(object):
 
 
 def parse_row(row_xml_string, book):
-    if "x14ac" in row_xml_string:
+    if b"x14ac" in row_xml_string:
         row_xml_string = row_xml_string.replace(
-            "<row", "<row %s" % X14AC_NAMESPACE
+            b"<row", (b"<row " + X14AC_NAMESPACE)
         )
     partial = io.BytesIO(row_xml_string)
     cells = []
