@@ -1,0 +1,21 @@
+name: pyexcel-xlsxr
+organisation: pyexcel
+releases:
+- changes:
+  - action: Updated
+    details:
+    - Fix python 3 compactibility
+  date: 15.09.2018
+  version: 0.5.2
+- changes:
+  - action: Updated
+    details:
+    - "`#1`: fix xml parsing problem when the microsoft spreadsheetml 2009 ac name space 'x14ac' made lxml an idiot"
+  date: 14.07.2018
+  version: 0.5.1
+- changes:
+  - action: Added
+    details:
+    - Initial release. In order align it with pyexcel 0.5.0 release, its version start from 0.5.0
+  date: 24.11.2017
+  version: 0.5.0
