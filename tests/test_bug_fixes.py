@@ -9,8 +9,11 @@ from pyexcel_xlsxr import get_data
 def test_issue_1():
     test_file = get_fixture("issue_1.xlsx")
     data = get_data(test_file)
+    data_array = [
+        list(map(str, row)) for row in data["dataSheet1"]
+    ]
     eq_(
-        data["dataSheet1"],
+        data_array,
         [
             ["", "D0"],
             ["Pads", "PADA"],
