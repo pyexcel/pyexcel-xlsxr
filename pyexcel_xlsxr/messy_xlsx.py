@@ -4,9 +4,8 @@ import re
 import zipfile
 from datetime import datetime, time, timedelta
 
-from pyexcel_io._compact import OrderedDict
-
 from lxml import etree
+from pyexcel_io._compact import OrderedDict
 
 STYLE_FILENAME = "xl/styles.xml"
 SHARED_STRING = "xl/sharedStrings.xml"
