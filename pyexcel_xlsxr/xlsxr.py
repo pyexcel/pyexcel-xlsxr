@@ -6,13 +6,13 @@
     :copyright: (c) 2017 by Onni Software Ltd & its contributors
     :license: New BSD License
 """
-from datetime import datetime, date, time
+from datetime import date, datetime, time
 from io import UnsupportedOperation
 
+import pyexcel_io.service as service
+from pyexcel_io._compact import BytesIO, OrderedDict
 from pyexcel_io.book import BookReader
 from pyexcel_io.sheet import SheetReader
-from pyexcel_io._compact import OrderedDict, BytesIO
-import pyexcel_io.service as service
 
 from pyexcel_xlsxr.messy_xlsx import XLSXBookSet
 
@@ -43,18 +43,21 @@ class XLSXSheet(SheetReader):
             yield self.__convert_cell(cell)
 
     def __convert_cell(self, cell):
+        if cell is None:
+            return None
         if isinstance(cell, (datetime, date, time)):
             return cell
         ret = None
-        if self.__auto_detect_int:
-            ret = service.detect_int_value(cell)
-        if ret is None and self.__auto_detect_float:
-            ret = service.detect_float_value(cell)
-            shall_we_ignore_the_conversion = (
-                ret in [float("inf"), float("-inf")]
-            ) and self.__ignore_infinity
-            if shall_we_ignore_the_conversion:
-                ret = None
+        if isinstance(cell, str):
+            if self.__auto_detect_int:
+                ret = service.detect_int_value(cell)
+            if ret is None and self.__auto_detect_float:
+                ret = service.detect_float_value(cell)
+                shall_we_ignore_the_conversion = (
+                    ret in [float("inf"), float("-inf")]
+                ) and self.__ignore_infinity
+                if shall_we_ignore_the_conversion:
+                    ret = None
         if ret is None:
             ret = cell
         return ret
