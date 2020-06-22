@@ -11,5 +11,5 @@ dependencies:
   - pyexcel-io >= 0.5.4
 description: "Read xlsx file using partial xml"
 test_dependencies:
-  - pyexcel
+  - pyexcel<=0.6.0
   - pyexcel-xlsxw

@@ -8,5 +8,5 @@ isort
 collective.checkdocs
 pygments
 moban
-pyexcel
+pyexcel<=0.6.0
 pyexcel-xlsxw
