@@ -5,9 +5,11 @@
     :copyright: (c) 2015-2017 by Onni Software Ltd & its contributors
     :license: New BSD License
 """
+from pyexcel_io.io import get_data as read_data
+from pyexcel_io.io import isstream
 from pyexcel_io.plugins import IOPluginInfoChain
-from pyexcel_io.io import get_data as read_data, isstream
-from pyexcel_xlsxr._version import __version__, __author__  # flake8: noqa
+
+from pyexcel_xlsxr._version import __author__, __version__  # flake8: noqa
 
 __FILE_TYPE__ = "xlsx"
 

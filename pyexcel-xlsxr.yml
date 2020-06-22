@@ -10,3 +10,6 @@ dependencies:
   - lxml >= 3.4.4
   - pyexcel-io >= 0.5.4
 description: "Read xlsx file using partial xml"
+test_dependencies:
+  - pyexcel
+  - pyexcel-xlsxw

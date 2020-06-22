@@ -1,10 +1,12 @@
-import os
 import io
+import os
 import re
-from lxml import etree
 import zipfile
-from datetime import datetime, timedelta, time
+from datetime import datetime, time, timedelta
+
 from pyexcel_io._compact import OrderedDict
+
+from lxml import etree
 
 STYLE_FILENAME = "xl/styles.xml"
 SHARED_STRING = "xl/sharedStrings.xml"
@@ -20,8 +22,8 @@ XFS_FMT_MATCHER = re.compile(
 )
 SHEET_FMT_MATCHER = re.compile(b".*?(<sheet .*?\/>).*?", re.MULTILINE)
 DATE_1904_MATCHER = re.compile(b".*?(<workbookPr.*?\/>).*?", re.MULTILINE)
-#"xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
-#But it not used for now
+# "xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
+# But it not used for now
 X14AC_NAMESPACE = b'xmlns:x14ac="http://not.used.com/"'
 
 # see also ruby-roo lib at: http://github.com/hmcgowan/roo

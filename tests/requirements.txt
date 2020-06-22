@@ -3,7 +3,10 @@ mock;python_version<"3"
 codecov
 coverage
 flake8
-lxml==3.4.4;python_implementation=="PyPy"
-lxml==4.1.1;python_version>="3.7"
+black
+isort
+collective.checkdocs
+pygments
+moban
 pyexcel
 pyexcel-xlsxw

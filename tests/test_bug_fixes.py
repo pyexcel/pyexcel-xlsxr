@@ -1,5 +1,8 @@
 import os
+from unittest.mock import MagicMock
+
 from nose.tools import eq_
+
 from pyexcel_xlsxr import get_data
 
 
@@ -116,6 +119,17 @@ def test_issue_1():
             [100.0, 2.589721],
         ],
     )
+
+
+def test_issue_5():
+    native_sheet = MagicMock(
+        name="test", raw=MagicMock(return_value=[[None, 11, "11"]])
+    )
+    from pyexcel_xlsxr.xlsxr import XLSXSheet
+
+    sheet = XLSXSheet(native_sheet)
+    data = sheet.to_array()
+    print(list(data))
 
 
 def get_fixture(file_name):
