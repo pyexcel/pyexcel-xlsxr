@@ -129,7 +129,7 @@ def test_issue_5():
 
     sheet = XLSXSheet(native_sheet)
     data = sheet.to_array()
-    print(list(data))
+    eq_(list(data), [[None, 11, 11]])
 
 
 def get_fixture(file_name):
