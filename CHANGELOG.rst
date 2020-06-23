@@ -1,6 +1,16 @@
 Change log
 ================================================================================
 
+0.5.3 - 23.06.2020
+--------------------------------------------------------------------------------
+
+**Fixed**
+
+#. `#5 <https://github.com/pyexcel/pyexcel-xlsxr/issues/5>`_: AttributeError
+   when a cell text is None
+#. `#2 <https://github.com/pyexcel/pyexcel-xlsxr/issues/2>`_: unit test failed
+   in OpenSuSE
+
 0.5.2 - 15.09.2018
 --------------------------------------------------------------------------------
 

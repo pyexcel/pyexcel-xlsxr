@@ -2,6 +2,13 @@ name: pyexcel-xlsxr
 organisation: pyexcel
 releases:
 - changes:
+  - action: Fixed
+    details:
+    - "`#5`: AttributeError when a cell text is None"
+    - "`#2`: unit test failed in OpenSuSE"
+  date: 23.06.2020
+  version: 0.5.3
+- changes:
   - action: Updated
     details:
     - Fix python 3 compactibility
