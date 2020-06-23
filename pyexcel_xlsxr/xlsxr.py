@@ -1,11 +1,3 @@
-"""
-    pyexcel_xlsxr.xlsxr
-    ~~~~~~~~~~~~~~~~~~~
-    The lower level xlsx file format handler
-
-    :copyright: (c) 2017 by Onni Software Ltd & its contributors
-    :license: New BSD License
-"""
 from datetime import date, datetime, time
 from io import UnsupportedOperation
 
