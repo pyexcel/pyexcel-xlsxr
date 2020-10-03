@@ -11,15 +11,15 @@ SHARED_STRING = "xl/sharedStrings.xml"
 WORK_BOOK = "xl/workbook.xml"
 SHEET_MATCHER = "xl/worksheets/(work)?sheet([0-9]+)?.xml"
 SHEET_INDEX_MATCHER = "xl/worksheets/(work)?sheet(([0-9]+)?).xml"
-XLSX_ROW_MATCH = re.compile(b".*?(<row.*?<\/.*?row>).*?", re.MULTILINE)
+XLSX_ROW_MATCH = re.compile(rb".*?(<row.*?<\/.*?row>).*?", re.MULTILINE)
 NUMBER_FMT_MATCHER = re.compile(
-    b".*?(<numFmts.*?<\/.*?numFmts>).*?", re.MULTILINE
+    rb".*?(<numFmts.*?<\/.*?numFmts>).*?", re.MULTILINE
 )
 XFS_FMT_MATCHER = re.compile(
-    b".*?(<cellXfs.*?<\/.*?cellXfs>).*?", re.MULTILINE
+    rb".*?(<cellXfs.*?<\/.*?cellXfs>).*?", re.MULTILINE
 )
-SHEET_FMT_MATCHER = re.compile(b".*?(<sheet .*?\/>).*?", re.MULTILINE)
-DATE_1904_MATCHER = re.compile(b".*?(<workbookPr.*?\/>).*?", re.MULTILINE)
+SHEET_FMT_MATCHER = re.compile(rb".*?(<sheet .*?\/>).*?", re.MULTILINE)
+DATE_1904_MATCHER = re.compile(rb".*?(<workbookPr.*?\/>).*?", re.MULTILINE)
 # "xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
 # But it not used for now
 X14AC_NAMESPACE = b'xmlns:x14ac="http://not.used.com/"'
@@ -140,8 +140,9 @@ class XLSXBookSet(object):
         book_content = self.zip_file.open(WORK_BOOK).read()
         return parse_book_properties(book_content)
 
-    def __del__(self):
-        self.zip_file.close()
+    def close(self):
+        if self.zip_file:
+            self.zip_file.close()
 
     def make_tables(self):
         sheet_files = find_sheets(self.zip_file.namelist())
@@ -216,9 +217,9 @@ def parse_cell_type(cell):
     cell_type = None
     if cell.style_string:
         date_time_flag = (
-            re.match("^\d+(\.\d+)?$", cell.value)
+            re.match(r"^\d+(\.\d+)?$", cell.value)
             and re.match(".*[hsmdyY]", cell.style_string)
-            and not re.match(".*\[.*[dmhys].*\]", cell.style_string)
+            and not re.match(r".*\[.*[dmhys].*\]", cell.style_string)
         )
         if cell.style_string in FORMATS:
             cell_type = FORMATS[cell.style_string]
@@ -227,7 +228,7 @@ def parse_cell_type(cell):
                 cell_type = "time"
             else:
                 cell_type = "date"
-        elif re.match("^-?\d+(.\d+)?$", cell.value):
+        elif re.match(r"^-?\d+(.\d+)?$", cell.value):
             cell_type = "float"
     return cell_type
 
@@ -313,9 +314,12 @@ def parse_book_properties(book_content):
                     properties["date1904"] = value.lower().strip() == "true"
                 else:
                     properties["date1904"] = False
-    namespaces = {
-        "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships"  # flake8: noqa
-    }
+
+    ns = (
+        "http://schemas.openxmlformats.org/"
+        + "officeDocument/2006/relationships"
+    )
+    namespaces = {"r": ns}
 
     xlsx_header = u"<wrapper {0}>".format(
         " ".join('xmlns:{0}="{1}"'.format(k, v) for k, v in namespaces.items())
