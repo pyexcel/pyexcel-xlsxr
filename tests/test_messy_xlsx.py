@@ -142,7 +142,8 @@ def test_parse_row():
 
 def test_parse_styles():
     sample = b"""
-     <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+     <styleSheet
+       xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
      <numFmts count="3"><numFmt formatCode="GENERAL" numFmtId="164"/>
      <numFmt formatCode="DD/MM/YY" numFmtId="165"/>
      <numFmt formatCode="H:MM:SS;@" numFmtId="166"/>
@@ -158,7 +159,7 @@ def test_parse_properties():
     sample = b"""
      <workbook
        xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-       xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
          <fileVersion appName="Calc"/>
          <workbookPr backupFile="false" showObjects="all" date1904="false"/>
     <workbookProtection/>""".replace(

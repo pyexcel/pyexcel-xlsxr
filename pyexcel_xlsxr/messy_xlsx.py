@@ -314,9 +314,12 @@ def parse_book_properties(book_content):
                     properties["date1904"] = value.lower().strip() == "true"
                 else:
                     properties["date1904"] = False
-    namespaces = {
-        "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-    }
+
+    ns = (
+        "http://schemas.openxmlformats.org/"
+        + "officeDocument/2006/relationships"
+    )
+    namespaces = {"r": ns}
 
     xlsx_header = u"<wrapper {0}>".format(
         " ".join('xmlns:{0}="{1}"'.format(k, v) for k, v in namespaces.items())
