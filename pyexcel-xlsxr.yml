@@ -3,13 +3,15 @@ name: "pyexcel-xlsxr"
 nick_name: "xlsxr"
 version: "0.6.0"
 current_version: "0.6.0"
-release: "0.5.3"
+release: "0.6.0"
 file_type: xlsx
 nodocs: true
 dependencies:
-  - lxml >= 3.4.4
-  - pyexcel-io >= 0.5.4
+  - lxml>=3.4.4
+  - pyexcel-io>=0.6.2
 description: "Read xlsx file using partial xml"
 test_dependencies:
-  - pyexcel<=0.6.0
+  - pyexcel
   - pyexcel-xlsxw
+python_requires: ">=3.6"
+min_python_version: "3.6"
