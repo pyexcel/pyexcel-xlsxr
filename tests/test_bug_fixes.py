@@ -2,7 +2,7 @@ import os
 from unittest.mock import MagicMock
 
 from nose.tools import eq_
-
+from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_xlsxr import get_data
 
 
@@ -128,7 +128,7 @@ def test_issue_5():
     )
     from pyexcel_xlsxr.xlsxr import XLSXSheet
 
-    sheet = XLSXSheet(native_sheet)
+    sheet = EncapsulatedSheetReader(XLSXSheet(native_sheet))
     data = sheet.to_array()
     eq_(list(data), [[None, 11, 11]])
 
