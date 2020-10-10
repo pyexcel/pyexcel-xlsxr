@@ -1,2 +1,2 @@
-lxml >= 3.4.4
-pyexcel-io >= 0.5.4
+lxml>=3.4.4
+pyexcel-io>=0.6.2

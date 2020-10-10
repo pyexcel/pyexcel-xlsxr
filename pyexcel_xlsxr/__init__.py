@@ -2,19 +2,24 @@
     pyexcel_xlsxr
     ~~~~~~~~~~~~~~~~~~~
     The lower level xlsx file format handler using lxml
-    :copyright: (c) 2015-2017 by Onni Software Ltd & its contributors
+    :copyright: (c) 2015-2020 by Onni Software Ltd & its contributors
     :license: New BSD License
 """
 from pyexcel_io.io import get_data as read_data
 from pyexcel_io.io import isstream
-from pyexcel_io.plugins import IOPluginInfoChain
-
-from pyexcel_xlsxr._version import __author__, __version__  # flake8: noqa
+from pyexcel_io.plugins import IOPluginInfoChainV2
+from pyexcel_xlsxr._version import __author__, __version__  # noqa
 
 __FILE_TYPE__ = "xlsx"
 
-IOPluginInfoChain(__name__).add_a_reader(
+IOPluginInfoChainV2(__name__).add_a_reader(
     relative_plugin_class_path="xlsxr.XLSXBook",
+    locations=["file", "memory"],
+    file_types=[__FILE_TYPE__],
+    stream_type="binary",
+).add_a_reader(
+    relative_plugin_class_path="xlsxr.XLSXBookInContent",
+    locations=["content"],
     file_types=[__FILE_TYPE__],
     stream_type="binary",
 )

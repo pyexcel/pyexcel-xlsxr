@@ -8,5 +8,6 @@ isort
 collective.checkdocs
 pygments
 moban
-pyexcel<=0.6.0
+moban_jinja2_github
+pyexcel
 pyexcel-xlsxw

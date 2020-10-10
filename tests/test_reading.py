@@ -1,10 +1,10 @@
 import os
-from datetime import datetime, time
-
-from nose.tools import eq_
-from pyexcel_io._compact import OrderedDict
+from datetime import time, datetime
 
 from pyexcel_xlsxr import get_data
+from pyexcel_io._compact import OrderedDict
+
+from nose.tools import eq_
 
 
 def test_reading():
