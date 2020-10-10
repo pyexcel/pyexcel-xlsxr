@@ -1,16 +1,16 @@
-from datetime import datetime, time
-
-from nose.tools import eq_
+from datetime import time, datetime
 
 from pyexcel_xlsxr.messy_xlsx import (
-    find_sheets,
-    get_sheet_index,
-    parse_book_properties,
     parse_row,
-    parse_shared_strings,
+    find_sheets,
     parse_styles,
+    get_sheet_index,
     parse_xfs_styles,
+    parse_shared_strings,
+    parse_book_properties,
 )
+
+from nose.tools import eq_
 
 
 def test_get_sheet_index():

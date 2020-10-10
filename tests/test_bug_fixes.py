@@ -1,10 +1,10 @@
 import os
 from unittest.mock import MagicMock
 
-from nose.tools import eq_
-
-from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_xlsxr import get_data
+from pyexcel_io.reader import EncapsulatedSheetReader
+
+from nose.tools import eq_
 
 
 def test_issue_1():

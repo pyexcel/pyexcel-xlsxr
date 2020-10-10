@@ -1,7 +1,7 @@
 import io
 import re
 import zipfile
-from datetime import datetime, time, timedelta
+from datetime import time, datetime, timedelta
 
 from lxml import etree
 from pyexcel_io._compact import OrderedDict

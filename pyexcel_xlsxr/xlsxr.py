@@ -1,8 +1,8 @@
-from datetime import date, datetime, time
 from io import BytesIO
+from datetime import date, time, datetime
 
 import pyexcel_io.service as service
-from pyexcel_io.plugin_api import IReader, ISheet, NamedContent
+from pyexcel_io.plugin_api import ISheet, IReader, NamedContent
 from pyexcel_xlsxr.messy_xlsx import XLSXBookSet
 
 
@@ -53,7 +53,7 @@ class XLSXBook(IReader):
         self._keywords = keywords
         tables = self.xlsx_book.make_tables()
         self.content_array = [
-            NameContent(table.name, table) for table in tables
+            NamedContent(table.name, table) for table in tables
         ]
 
     def read_sheet(self, sheet_index):
