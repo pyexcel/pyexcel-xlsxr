@@ -2,8 +2,8 @@ import os
 from datetime import datetime, time
 
 from nose.tools import eq_
-from pyexcel_io._compact import OrderedDict
 
+from pyexcel_io._compact import OrderedDict
 from pyexcel_xlsxr import get_data
 
 

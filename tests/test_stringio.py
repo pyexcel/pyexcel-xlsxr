@@ -1,8 +1,9 @@
 import os
 
 import pyexcel
-from base import create_sample_file1
 from nose.tools import eq_
+
+from base import create_sample_file1
 
 
 class TestStringIO:

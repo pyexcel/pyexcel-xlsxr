@@ -8,7 +8,6 @@
 from pyexcel_io.io import get_data as read_data
 from pyexcel_io.io import isstream
 from pyexcel_io.plugins import IOPluginInfoChainV2
-
 from pyexcel_xlsxr._version import __author__, __version__  # noqa
 
 __FILE_TYPE__ = "xlsx"
