@@ -182,6 +182,14 @@ class Cell(object):
         return str(self.value)
 
 
+def column_to_number(column):
+    column = re.sub("[^A-Z]", "", column)
+    cl = len(column) - 1
+    return sum(
+        [(ord(c.upper()) - 64) + (26 * (cl - i)) for i, c in enumerate(column)]
+    )
+
+
 def parse_row(row_xml_string, book):
     if b"x14ac" in row_xml_string:
         row_xml_string = row_xml_string.replace(
@@ -191,11 +199,20 @@ def parse_row(row_xml_string, book):
     cells = []
     cell = Cell()
 
+    last_column_number = None
     for action, element in etree.iterparse(partial):
-
         if element.tag in ["v", "t"]:
             cell.value = element.text
         elif element.tag in ["c"]:
+            ref = element.attrib.get("r")
+            if ref:
+                column_number = column_to_number(ref)
+                if last_column_number is not None:
+                    padding = column_number - last_column_number - 1
+                    if padding > 0:
+                        cells += [Cell() for _ in range(padding)]
+                last_column_number = column_number
+
             local_type = element.attrib.get("t")
             cell.column_type = local_type
             style_int = element.attrib.get("s")
