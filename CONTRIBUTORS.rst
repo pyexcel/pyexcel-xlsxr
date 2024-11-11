@@ -1,6 +1,8 @@
 
 
-No contributors yet
-=======================
+1 contributors
+================================================================================
 
-* Your github link will be listed here after your PR is merged
+In alphabetical order:
+
+* `Mark Skelton <https://github.com/mtskelton>`_

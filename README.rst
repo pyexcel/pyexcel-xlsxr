@@ -8,9 +8,6 @@ pyexcel-xlsxr - Let you focus on data, instead of xlsx format
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel-mobans/master/images/awesome-badge.svg
    :target: https://awesome-python.com/#specific-formats-processing
 
-.. image:: https://github.com/pyexcel/pyexcel-xlsxr/workflows/run_tests/badge.svg
-   :target: http://github.com/pyexcel/pyexcel-xlsxr/actions
-
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-xlsxr/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-xlsxr
 
@@ -18,8 +15,7 @@ pyexcel-xlsxr - Let you focus on data, instead of xlsx format
    :target: https://pypi.org/project/pyexcel-xlsxr
 
 
-.. image:: https://pepy.tech/badge/pyexcel-xlsxr/month
-   :target: https://pepy.tech/project/pyexcel-xlsxr
+
 
 
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
@@ -316,7 +312,7 @@ Then install relevant development requirements:
 #. pip install -r tests/requirements.txt
 
 Once you have finished your changes, please provide test case(s), relevant documentation
-and update CHANGELOG.rst.
+and update changelog.yml
 
 .. note::
 
@@ -335,7 +331,7 @@ On Linux/Unix systems, please launch your tests like this::
 
     $ make
 
-On Windows systems, please issue this command::
+On Windows, please issue this command::
 
     > test.bat
 
@@ -347,7 +343,7 @@ Please run::
 
     $ make format
 
-so as to beautify your code otherwise travis-ci may fail your unit test.
+so as to beautify your code otherwise your build may fail your unit test.
 
 
 
