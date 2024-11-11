@@ -4,6 +4,7 @@ nick_name: "xlsxr"
 version: "0.6.1"
 current_version: "0.6.1"
 release: "0.6.1"
+copyright_year: 2015-2024
 file_type: xlsx
 nodocs: true
 dependencies:
