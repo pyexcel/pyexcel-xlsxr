@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: Updated
     details:
+    - '#9: Potential fix for incorrect reading of data with empty cells when used with pyexcel '
+  date: 11.11.2024
+  version: 0.6.1
+- changes:
+  - action: Updated
+    details:
     - 'New style xlsx plugins, promoted by pyexcel-io v0.6.2.'
   date: 10.10.2020
   version: 0.6.0
