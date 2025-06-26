@@ -12,7 +12,7 @@ SHARED_STRING = "xl/sharedStrings.xml"
 WORK_BOOK = "xl/workbook.xml"
 SHEET_MATCHER = "xl/worksheets/(work)?sheet([0-9]+)?.xml"
 SHEET_INDEX_MATCHER = "xl/worksheets/(work)?sheet(([0-9]+)?).xml"
-XLSX_ROW_MATCH = re.compile(rb".*?(<row.*?<\/.*?row>).*?", re.MULTILINE)
+XLSX_ROW_MATCH = re.compile(rb"<row\b[^>]*>.*?</row>", re.DOTALL)
 NUMBER_FMT_MATCHER = re.compile(
     rb".*?(<numFmts.*?<\/.*?numFmts>).*?", re.MULTILINE
 )
