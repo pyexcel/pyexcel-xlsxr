@@ -2,7 +2,12 @@ name: pyexcel-xlsxr
 organisation: pyexcel
 releases:
 - changes:
-  - action: Updated
+- action: Fixed
+    details:
+    - 'Fix reading of files with more than 26 columns'
+  date: 30.10.2025
+  version: 0.6.2
+- action: Updated
     details:
     - '#9: Potential fix for incorrect reading of data with empty cells when used with pyexcel '
   date: 11.11.2024
