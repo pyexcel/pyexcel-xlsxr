@@ -338,10 +338,10 @@ def parse_book_properties(book_content):
     )
     namespaces = {"r": ns}
 
-    xlsx_header = u"<wrapper {0}>".format(
+    xlsx_header = "<wrapper {0}>".format(
         " ".join('xmlns:{0}="{1}"'.format(k, v) for k, v in namespaces.items())
     ).encode("utf-8")
-    xlsx_footer = u"</wrapper>".encode("utf-8")
+    xlsx_footer = "</wrapper>".encode("utf-8")
     sheets = SHEET_FMT_MATCHER.findall(book_content)
     for sheet in sheets:
         block = xlsx_header + sheet + xlsx_footer
