@@ -2,6 +2,7 @@ import io
 import re
 import zipfile
 from datetime import time, datetime, timedelta
+from functools import cache
 
 from lxml import etree
 from pyexcel_io._compact import OrderedDict
@@ -182,12 +183,16 @@ class Cell(object):
         return str(self.value)
 
 
+@cache
 def column_to_number(column):
-    column = re.sub("[^A-Z]", "", column)
-    cl = len(column) - 1
-    return sum(
-        [(ord(c.upper()) - 64) + (26 * (cl - i)) for i, c in enumerate(column)]
-    )
+    column = re.sub(r"[^A-Z]", "", column.upper())
+
+    result = 0
+
+    for index, c in enumerate(column):
+        result = result * 26 + (ord(c) - ord("A") + 1)
+
+    return result
 
 
 def parse_row(row_xml_string, book):

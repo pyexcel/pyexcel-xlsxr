@@ -5,6 +5,7 @@ from pyexcel_xlsxr.messy_xlsx import (
     find_sheets,
     parse_styles,
     get_sheet_index,
+    column_to_number,
     parse_xfs_styles,
     parse_shared_strings,
     parse_book_properties,
@@ -213,3 +214,31 @@ def test_parse_shared_strings():
     )
     content = parse_shared_strings(sample)
     assert list(content) == ["Date", "Time"]
+
+
+def test_column_to_number_a1():
+    assert column_to_number("A1") == 1
+
+
+def test_column_to_number_z1():
+    assert column_to_number("Z1") == 26
+
+
+def test_column_to_number_aa2():
+    assert column_to_number("AA2") == 27
+
+
+def test_column_to_number_lowercase_az1():
+    assert column_to_number("az1") == 52
+
+
+def test_column_to_number_lowercase_ba1():
+    assert column_to_number("ba1") == 53
+
+
+def test_column_to_number_aaa():
+    assert column_to_number("AAA1") == 703
+
+
+def test_column_to_number_xfd():
+    assert column_to_number("XFD1") == 16384
