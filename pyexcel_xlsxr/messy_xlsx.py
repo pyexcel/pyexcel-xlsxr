@@ -10,17 +10,12 @@ from pyexcel_io._compact import OrderedDict
 STYLE_FILENAME = "xl/styles.xml"
 SHARED_STRING = "xl/sharedStrings.xml"
 WORK_BOOK = "xl/workbook.xml"
-SHEET_MATCHER = "xl/worksheets/(work)?sheet([0-9]+)?.xml"
-SHEET_INDEX_MATCHER = "xl/worksheets/(work)?sheet(([0-9]+)?).xml"
-XLSX_ROW_MATCH = re.compile(rb".*?(<row.*?<\/.*?row>).*?", re.MULTILINE)
-NUMBER_FMT_MATCHER = re.compile(
-    rb".*?(<numFmts.*?<\/.*?numFmts>).*?", re.MULTILINE
-)
-XFS_FMT_MATCHER = re.compile(
-    rb".*?(<cellXfs.*?<\/.*?cellXfs>).*?", re.MULTILINE
-)
-SHEET_FMT_MATCHER = re.compile(rb".*?(<sheet .*?\/>).*?", re.MULTILINE)
-DATE_1904_MATCHER = re.compile(rb".*?(<workbookPr.*?\/>).*?", re.MULTILINE)
+SHEET_MATCHER = re.compile(r"xl/worksheets/(?:work)?sheet([0-9]+)?.xml")
+XLSX_ROW_MATCH = re.compile(rb"<row\b[^>]*>.*?</row>", re.DOTALL)
+NUMBER_FMT_MATCHER = re.compile(rb"<numFmts\b[^>]*>.*?</numFmts>", re.DOTALL)
+XFS_FMT_MATCHER = re.compile(rb"<cellXfs\b[^>]*>.*?</cellXfs>", re.DOTALL)
+SHEET_FMT_MATCHER = re.compile(rb"<sheet\b.*?/>", re.DOTALL)
+DATE_1904_MATCHER = re.compile(rb"<workbookPr\b.*?/>", re.DOTALL)
 # "xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
 # But it not used for now
 X14AC_NAMESPACE = b'xmlns:x14ac="http://not.used.com/"'
@@ -159,14 +154,15 @@ def find_sheets(file_list):
     return [
         sheet_file
         for sheet_file in file_list
-        if re.match(SHEET_MATCHER, sheet_file)
+        if SHEET_MATCHER.match(sheet_file)
     ]
 
 
 def get_sheet_index(file_name):
-    if re.match(SHEET_MATCHER, file_name):
-        result = re.search(SHEET_INDEX_MATCHER, file_name)
-        index = int(result.group(3)) if result.group(3) else 1
+    sheet_match = SHEET_MATCHER.match(file_name)
+
+    if sheet_match:
+        index = int(sheet_match.group(1)) if sheet_match.group(1) else 1
         return index - 1
     else:
         raise Exception("Invalid sheet file name")
