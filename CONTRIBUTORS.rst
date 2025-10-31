@@ -1,6 +1,6 @@
 
 
-1 contributors
+2 contributors
 ================================================================================
 
 In alphabetical order:
