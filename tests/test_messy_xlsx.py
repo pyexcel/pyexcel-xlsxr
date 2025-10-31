@@ -5,12 +5,11 @@ from pyexcel_xlsxr.messy_xlsx import (
     find_sheets,
     parse_styles,
     get_sheet_index,
+    column_to_number,
     parse_xfs_styles,
     parse_shared_strings,
     parse_book_properties,
 )
-
-from nose.tools import eq_
 
 
 def test_get_sheet_index():
@@ -22,7 +21,7 @@ def test_get_sheet_index():
     ]
     expected = [0, 1, 0, 0]
     actual = [get_sheet_index(file_name) for file_name in samples]
-    eq_(actual, expected)
+    assert actual == expected
 
 
 def test_list_one():
@@ -47,7 +46,7 @@ def test_list_one():
     ]
 
     sheet_files = find_sheets(test_sample)
-    eq_(sheet_files, expected)
+    assert sheet_files == expected
 
 
 def test_alternative_file_list():
@@ -72,7 +71,7 @@ def test_alternative_file_list():
     ]
 
     sheet_files = find_sheets(test_sample)
-    eq_(sheet_files, expected)
+    assert sheet_files == expected
 
 
 def test_single_sheet():
@@ -91,7 +90,7 @@ def test_single_sheet():
     expected = ["xl/worksheets/sheet.xml"]
 
     sheet_files = find_sheets(test_sample)
-    eq_(sheet_files, expected)
+    assert sheet_files == expected
 
 
 def test_alternative_single_sheet():
@@ -110,7 +109,7 @@ def test_alternative_single_sheet():
     expected = ["xl/worksheets/worksheet.xml"]
 
     sheet_files = find_sheets(test_sample)
-    eq_(sheet_files, expected)
+    assert sheet_files == expected
 
 
 def test_parse_row():
@@ -131,13 +130,10 @@ def test_parse_row():
             self.properties = {"date1904": False}
 
     data = parse_row(xml_string, Book())
-    eq_(
-        [cell for cell in data],
-        [
-            datetime(year=2015, month=1, day=1),
-            time(hour=13, minute=13, second=13),
-        ],
-    )
+    assert [cell for cell in data] == [
+        datetime(year=2015, month=1, day=1),
+        time(hour=13, minute=13, second=13),
+    ]
 
 
 def test_parse_styles():
@@ -152,7 +148,7 @@ def test_parse_styles():
         b"\n", b" "
     )
     styles = parse_styles(sample)
-    eq_(list(styles.values()), ["general", "dd/mm/yy", "h:mm:ss;@"])
+    assert list(styles.values()) == ["general", "dd/mm/yy", "h:mm:ss;@"]
 
 
 def test_parse_properties():
@@ -166,7 +162,7 @@ def test_parse_properties():
         b"\n", b" "
     )
     properties = parse_book_properties(sample)
-    eq_(properties, {"date1904": False, "sheets": []})
+    assert properties == {"date1904": False, "sheets": []}
 
 
 def test_parse_sheet_properties():
@@ -181,7 +177,7 @@ def test_parse_sheet_properties():
         b"\n", b" "
     )
     properties = parse_book_properties(sample)
-    eq_(properties, {"sheets": ["Sheet1", "Sheet2", "Sheet3"]})
+    assert properties == {"sheets": ["Sheet1", "Sheet2", "Sheet3"]}
 
 
 def test_parse_xfs_styles():
@@ -206,7 +202,7 @@ def test_parse_xfs_styles():
         b"\n", b" "
     )
     xfs_styles = parse_xfs_styles(sample)
-    eq_(xfs_styles, [164, 165, 166])
+    assert xfs_styles == [164, 165, 166]
 
 
 def test_parse_shared_strings():
@@ -217,4 +213,32 @@ def test_parse_shared_strings():
         b"\n", b" "
     )
     content = parse_shared_strings(sample)
-    eq_(list(content), ["Date", "Time"])
+    assert list(content) == ["Date", "Time"]
+
+
+def test_column_to_number_a1():
+    assert column_to_number("A1") == 1
+
+
+def test_column_to_number_z1():
+    assert column_to_number("Z1") == 26
+
+
+def test_column_to_number_aa2():
+    assert column_to_number("AA2") == 27
+
+
+def test_column_to_number_lowercase_az1():
+    assert column_to_number("az1") == 52
+
+
+def test_column_to_number_lowercase_ba1():
+    assert column_to_number("ba1") == 53
+
+
+def test_column_to_number_aaa():
+    assert column_to_number("AAA1") == 703
+
+
+def test_column_to_number_xfd():
+    assert column_to_number("XFD1") == 16384

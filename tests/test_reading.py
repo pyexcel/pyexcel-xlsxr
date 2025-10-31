@@ -4,8 +4,6 @@ from datetime import time, datetime
 from pyexcel_xlsxr import get_data
 from pyexcel_io._compact import OrderedDict
 
-from nose.tools import eq_
-
 
 def test_reading():
     data = get_data(
@@ -38,4 +36,4 @@ def test_reading():
     )
     expected.update({"Sheet2": []})
     expected.update({"Sheet3": []})
-    eq_(data, expected)
+    assert data == expected

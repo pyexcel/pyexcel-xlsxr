@@ -1,9 +1,8 @@
 import os
+import unittest
 from textwrap import dedent
 
 import pyexcel as pe
-
-from nose.tools import eq_
 
 
 class TestDateFormat:
@@ -22,15 +21,15 @@ class TestDateFormat:
             library="pyexcel-xlsxr",
         )
         assert isinstance(r[1, 0], datetime.date)
-        eq_(r[1, 0].strftime("%d/%m/%y"), "25/12/14")
+        assert r[1, 0].strftime("%d/%m/%y") == "25/12/14"
         assert isinstance(r[1, 1], datetime.time) is True
         assert r[1, 1].strftime("%H:%M:%S") == "11:11:11"
         value = r[4, 0].isoformat()
-        eq_(value, "1899-12-30T00:00:00")
-        eq_(r[4, 1].isoformat(), "00:00:00")
+        assert value == "1899-12-30T00:00:00"
+        assert r[4, 1].isoformat() == "00:00:00"
 
 
-class TestAutoDetectInt:
+class TestAutoDetectInt(unittest.TestCase):
     def setUp(self):
         self.content = [[1, 2, 3.1]]
         self.test_file = "test_auto_detect_init.xlsx"
@@ -45,7 +44,7 @@ class TestAutoDetectInt:
         | 1 | 2 | 3.1 |
         +---+---+-----+"""
         ).strip()
-        eq_(str(sheet), expected)
+        assert str(sheet) == expected
 
     def test_get_book_auto_detect_int(self):
         book = pe.get_book(file_name=self.test_file, library="pyexcel-xlsxr")
@@ -56,7 +55,7 @@ class TestAutoDetectInt:
         | 1 | 2 | 3.1 |
         +---+---+-----+"""
         ).strip()
-        eq_(str(book), expected)
+        assert str(book) == expected
 
     def test_auto_detect_int_false(self):
         sheet = pe.get_sheet(
@@ -71,7 +70,7 @@ class TestAutoDetectInt:
         | 1.0 | 2.0 | 3.1 |
         +-----+-----+-----+"""
         ).strip()
-        eq_(str(sheet), expected)
+        assert str(sheet) == expected
 
     def test_get_book_auto_detect_int_false(self):
         book = pe.get_book(
@@ -86,7 +85,7 @@ class TestAutoDetectInt:
         | 1.0 | 2.0 | 3.1 |
         +-----+-----+-----+"""
         ).strip()
-        eq_(str(book), expected)
+        assert str(book) == expected
 
     def tearDown(self):
         os.unlink(self.test_file)

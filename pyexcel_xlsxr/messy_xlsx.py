@@ -2,6 +2,7 @@ import io
 import re
 import zipfile
 from datetime import time, datetime, timedelta
+from functools import cache
 
 from lxml import etree
 from pyexcel_io._compact import OrderedDict
@@ -182,12 +183,16 @@ class Cell(object):
         return str(self.value)
 
 
+@cache
 def column_to_number(column):
-    column = re.sub("[^A-Z]", "", column)
-    cl = len(column) - 1
-    return sum(
-        [(ord(c.upper()) - 64) + (26 * (cl - i)) for i, c in enumerate(column)]
-    )
+    column = re.sub(r"[^A-Z]", "", column.upper())
+
+    result = 0
+
+    for index, c in enumerate(column):
+        result = result * 26 + (ord(c) - ord("A") + 1)
+
+    return result
 
 
 def parse_row(row_xml_string, book):
@@ -338,10 +343,10 @@ def parse_book_properties(book_content):
     )
     namespaces = {"r": ns}
 
-    xlsx_header = u"<wrapper {0}>".format(
+    xlsx_header = "<wrapper {0}>".format(
         " ".join('xmlns:{0}="{1}"'.format(k, v) for k, v in namespaces.items())
     ).encode("utf-8")
-    xlsx_footer = u"</wrapper>".encode("utf-8")
+    xlsx_footer = "</wrapper>".encode("utf-8")
     sheets = SHEET_FMT_MATCHER.findall(book_content)
     for sheet in sheets:
         block = xlsx_header + sheet + xlsx_footer

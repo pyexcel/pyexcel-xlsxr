@@ -1,4 +1,4 @@
-nose
+pytest~=8.4
 mock;python_version<"3"
 codecov
 coverage
