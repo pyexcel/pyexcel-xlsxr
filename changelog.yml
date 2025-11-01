@@ -6,6 +6,8 @@ releases:
     details:
     - 'Fix freeze when parsing certain corrupt XLSX files'
     - 'Fix reading of files with more than 26 columns'
+  - action: Updated
+    - 'Migrated to pytest'
   date: 31.10.2025
   version: 0.6.2
 - changes:
