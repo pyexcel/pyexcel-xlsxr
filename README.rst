@@ -128,7 +128,7 @@ Here's the sample code:
     >>> data = OrderedDict()
     >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
     >>> data.update({"Sheet 2": [[7, 8, 9], [10, 11, 12]]})
-    >>> io = StringIO()
+    >>> io = BytesIO()
     >>> save_data(io, data)
     >>> unused = io.seek(0)
     >>> # do something with the io
