@@ -2,19 +2,16 @@ name: pyexcel-xlsxr
 organisation: pyexcel
 releases:
 - changes:
-- action: Fixed
+  - action: Fixed
     details:
     - 'Fix freeze when parsing certain corrupt XLSX files'
-  date: 31.10.2025
-  version: 0.6.3
-- action: Fixed
-    details:
     - 'Fix reading of files with more than 26 columns'
-  date: 30.10.2025
+  date: 31.10.2025
   version: 0.6.2
-- action: Updated
+- changes:
+  - action: Updated
     details:
-    - '#9: Potential fix for incorrect reading of data with empty cells when used with pyexcel '
+    - '`#9`: Potential fix for incorrect reading of data with empty cells when used with pyexcel '
   date: 11.11.2024
   version: 0.6.1
 - changes:
