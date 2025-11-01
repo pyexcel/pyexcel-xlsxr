@@ -9,6 +9,10 @@ Change log
 #. Fix freeze when parsing certain corrupt XLSX files
 #. Fix reading of files with more than 26 columns
 
+**Updated**
+
+#. Migrated to pytest
+
 0.6.1 - 11.11.2024
 --------------------------------------------------------------------------------
 
