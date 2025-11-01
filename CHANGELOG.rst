@@ -1,13 +1,25 @@
 Change log
 ================================================================================
 
+0.6.2 - 31.10.2025
+--------------------------------------------------------------------------------
+
+**Fixed**
+
+#. Fix freeze when parsing certain corrupt XLSX files
+#. Fix reading of files with more than 26 columns
+
+**Updated**
+
+#. Migrated to pytest
+
 0.6.1 - 11.11.2024
 --------------------------------------------------------------------------------
 
 **Updated**
 
-#. #9: Potential fix for incorrect reading of data with empty cells when used
-   with pyexcel 
+#. `#9 <https://github.com/pyexcel/pyexcel-xlsxr/issues/9>`_: Potential fix for
+   incorrect reading of data with empty cells when used with pyexcel 
 
 0.6.0 - 10.10.2020
 --------------------------------------------------------------------------------

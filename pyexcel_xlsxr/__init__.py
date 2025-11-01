@@ -1,10 +1,11 @@
 """
-    pyexcel_xlsxr
-    ~~~~~~~~~~~~~~~~~~~
-    The lower level xlsx file format handler using lxml
-    :copyright: (c) 2015-2020 by Onni Software Ltd & its contributors
-    :license: New BSD License
+pyexcel_xlsxr
+~~~~~~~~~~~~~~~~~~~
+The lower level xlsx file format handler using lxml
+:copyright: (c) 2015-2020 by Onni Software Ltd & its contributors
+:license: New BSD License
 """
+
 from pyexcel_io.io import get_data as read_data
 from pyexcel_io.io import isstream
 from pyexcel_io.plugins import IOPluginInfoChainV2
