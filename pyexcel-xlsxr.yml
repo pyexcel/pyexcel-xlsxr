@@ -14,6 +14,7 @@ description: "Read xlsx file using partial xml"
 test_dependencies:
   - pyexcel
   - pyexcel-xlsxw
+  - pytest
 python_requires: ">=3.6"
 min_python_version: "3.6"
 use_pytest: true
