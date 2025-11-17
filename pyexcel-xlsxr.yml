@@ -16,3 +16,4 @@ test_dependencies:
   - pyexcel-xlsxw
 python_requires: ">=3.6"
 min_python_version: "3.6"
+use_pytest: true
